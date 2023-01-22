@@ -11,4 +11,5 @@ To get this program running locally or on SIBR Server:
 Any questions, tips, issues, feel free to come to the Society for Internet Blaseball Research Discord server: https://discord.gg/FfnScUn , 
 and visit @Gizmo aka Ifhbiff (he/him) and the other Data Witches in the #datablase forum.
 
+Neither the author of this repo nor SIBR itself are directly affiliated with Blaseball (www.blaseball.com), but obviously recommend joining the cultural event known as Blaseball.
 
