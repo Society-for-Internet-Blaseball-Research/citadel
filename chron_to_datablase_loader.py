@@ -168,7 +168,7 @@ def playersMain():
         #As long as we didn't dedupe down to zero, we have records to write            
         if player.shape[0] != 0:    
             print('Writing players to Postgres')
-            #player.to_sql('players',engine,schema='delta_data',if_exists='append',index=False)  
+            player.to_sql('players',engine,schema='delta_data',if_exists='append',index=False)  
         
         
         print("{0}: processed player page {1}, {2} new records added.".format(datetime.now(), pages, player.shape[0]))
@@ -262,14 +262,14 @@ def teamsMain():
             teams_processed = pd.concat([teams_processed, teams_processed_new])   
      
         if teams.shape[0] != 0:    
-            #teams.to_sql('teams',engine,schema='delta_data',if_exists='append',index=False)  
+            teams.to_sql('teams',engine,schema='delta_data',if_exists='append',index=False)  
             
             next_timestamp = max(teams["valid_from"] )
     
             print("{0}: processed team page {1}, records {2}.".format(datetime.now(), pages, teams.shape[0]))
         
         if raw_teams.shape[0] < 1000:
-            #conn.execute("UPDATE delta_data.api_loads_meta SET team_timestamp = '{0}'".format(next_timestamp))     
+            conn.execute("UPDATE delta_data.api_loads_meta SET team_timestamp = '{0}'".format(next_timestamp))     
             break
      
         pages +=1  
@@ -310,7 +310,7 @@ def gamesMain():
                                               "ballsNeeded":"balls_needed","strikesNeeded":"strikes_needed","outsNeeded":"outs_needed",
                                               "totalBases":"total_bases"}, inplace=True)
         games = games.join(game_states_to_append)
-        #games.to_sql('games',engine,schema='delta_data',if_exists='append',index=False)
+        games.to_sql('games',engine,schema='delta_data',if_exists='append',index=False)
         
         next_page = raw_games["next_page"][0]
         print("{0}: processed games page {1}, records {2}.".format(datetime.now(), pages, games.shape[0]))
@@ -357,7 +357,7 @@ def gameEventsMain():
             events_processed_new = game_events[["game_id", "display_order", "timestamp"]].copy()
             events_processed = pd.concat([events_processed, events_processed_new])
 
-        #game_events.to_sql('game_events_raw',engine,schema='ndata',if_exists='append',index=False)
+        game_events.to_sql('game_events_raw',engine,schema='ndata',if_exists='append',index=False)
         
         #Once we got less than the max 5000, that was the last time through the loop
         if raw_game_events.shape[0] < 5000:
