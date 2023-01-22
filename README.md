@@ -1,4 +1,4 @@
-# chron_to_datablase_loader-
+# CiTaDel (Chron To Datablase Loader)
 Loading blaseball's Delta eon data from SIBR Chron APIs to the Datablase.  May be ad hoc, may be start of real program.
 
 To get this program running locally or on SIBR Server:
