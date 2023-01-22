@@ -2,50 +2,35 @@
 -- Author: Ifhbiff
 -- Created: 2023-01-21
 
-DROP SCHEMA IF EXISTS delta_data;
+DROP SCHEMA IF EXISTS delta_data CASCADE;
 
 CREATE SCHEMA delta_data;
 
 --
--- TOC entry 256 (class 1259 OID 17405)
--- Name: api_loads_meta; Type: TABLE; Schema: delta_data; Owner: postgres
+--Name: chron_load_page_tokens; Type: TABLE; Schema: delta_data;
 --
 
-CREATE TABLE delta_data.api_loads_meta (
+CREATE TABLE IF NOT EXISTS delta_data.chron_load_page_tokens
+(
     id integer NOT NULL,
-    load_timestamp timestamp without time zone DEFAULT now(),
-    game_timestamp timestamp without time zone,
-    team_timestamp timestamp without time zone,
-    player_timestamp timestamp without time zone,
-    game_events_timestamp timestamp without time zone,
-    division_timestamp timestamp without time zone,
-    stadium_timestamp timestamp without time zone
+    object_name character varying COLLATE pg_catalog."default",
+    page_token character varying COLLATE pg_catalog."default",
+    valid_until timestamp without time zone DEFAULT now()
 );
 
---
--- TOC entry 255 (class 1259 OID 17404)
--- Name: api_loads_meta_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
-CREATE SEQUENCE delta_data.api_loads_meta_id_seq
+CREATE SEQUENCE delta_data.chron_load_page_tokens_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-	
---
--- TOC entry 3454 (class 0 OID 0)
--- Dependencies: 255
--- Name: api_loads_meta_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
 
-ALTER SEQUENCE delta_data.api_loads_meta_id_seq OWNED BY delta_data.api_loads_meta.id;
+ALTER SEQUENCE delta_data.chron_load_page_tokens_id_seq OWNED BY delta_data.chron_load_page_tokens.id;
+ALTER TABLE ONLY delta_data.chron_load_page_tokens ALTER COLUMN id SET DEFAULT nextval('delta_data.chron_load_page_tokens_id_seq'::regclass);
 
 --
--- TOC entry 230 (class 1259 OID 17263)
--- Name: game_events_abyline; Type: TABLE; Schema: delta_data; Owner: postgres
+-- Name: game_events_abyline; Type: TABLE; Schema: delta_data;
 --
 
 CREATE TABLE delta_data.game_events_abyline (
@@ -80,11 +65,6 @@ CREATE TABLE delta_data.game_events_abyline (
     error_msg character varying
 );
 
---
--- TOC entry 229 (class 1259 OID 17262)
--- Name: game_events_abyline_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.game_events_abyline_id_seq
     AS integer
     START WITH 1
@@ -93,17 +73,11 @@ CREATE SEQUENCE delta_data.game_events_abyline_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3455 (class 0 OID 0)
--- Dependencies: 229
--- Name: game_events_abyline_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.game_events_abyline_id_seq OWNED BY delta_data.game_events_abyline.id;
+ALTER TABLE ONLY delta_data.game_events_abyline ALTER COLUMN id SET DEFAULT nextval('delta_data.game_events_abyline_id_seq'::regclass);
 
 --
--- TOC entry 225 (class 1259 OID 17039)
--- Name: game_events_test_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
+-- Name: game_events_raw; Type: TABLE; Schema: delta_data;
 --
 
 CREATE TABLE delta_data.game_events_raw (
@@ -133,18 +107,13 @@ CREATE SEQUENCE delta_data.game_events_raw_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
---
--- TOC entry 3455 (class 0 OID 0)
--- Dependencies: 229
--- Name: game_events_abyline_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
 --
 
 ALTER SEQUENCE delta_data.game_events_raw_id_seq OWNED BY delta_data.game_events_raw.id;
+ALTER TABLE ONLY delta_data.game_events_raw ALTER COLUMN id SET DEFAULT nextval('delta_data.game_events_raw_id_seq'::regclass);
 
 --
--- TOC entry 228 (class 1259 OID 17246)
--- Name: games; Type: TABLE; Schema: delta_data; Owner: postgres
+-- Name: games; Type: TABLE; Schema: delta_data;
 --
 
 CREATE TABLE delta_data.games (
@@ -173,11 +142,6 @@ CREATE TABLE delta_data.games (
     series_length integer
 );
 
---
--- TOC entry 227 (class 1259 OID 17245)
--- Name: games_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.games_id_seq
     AS integer
     START WITH 1
@@ -186,18 +150,11 @@ CREATE SEQUENCE delta_data.games_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3456 (class 0 OID 0)
--- Dependencies: 227
--- Name: games_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.games_id_seq OWNED BY delta_data.games.id;
-
+ALTER TABLE ONLY delta_data.games ALTER COLUMN id SET DEFAULT nextval('delta_data.games_id_seq'::regclass);
 
 --
--- TOC entry 221 (class 1259 OID 16561)
--- Name: player_heatmaps; Type: TABLE; Schema: delta_data; Owner: postgres
+-- Name: player_heatmaps; Type: TABLE; Schema: delta_data
 --
 
 CREATE TABLE delta_data.player_heatmaps (
@@ -210,11 +167,6 @@ CREATE TABLE delta_data.player_heatmaps (
     valid_until timestamp without time zone
 );
 
---
--- TOC entry 220 (class 1259 OID 16560)
--- Name: player_heatmaps_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.player_heatmaps_id_seq
     AS integer
     START WITH 1
@@ -223,17 +175,11 @@ CREATE SEQUENCE delta_data.player_heatmaps_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3457 (class 0 OID 0)
--- Dependencies: 220
--- Name: player_heatmaps_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.player_heatmaps_id_seq OWNED BY delta_data.player_heatmaps.id;
+ALTER TABLE ONLY delta_data.player_heatmaps ALTER COLUMN id SET DEFAULT nextval('delta_data.player_heatmaps_id_seq'::regclass);
 
 --
--- TOC entry 219 (class 1259 OID 16544)
--- Name: players; Type: TABLE; Schema: delta_data; Owner: postgres
+-- Name: players; Type: TABLE; Schema: delta_data;
 --
 
 CREATE TABLE delta_data.players (
@@ -274,11 +220,6 @@ CREATE TABLE delta_data.players (
     temppositionname character varying
 );
 
---
--- TOC entry 218 (class 1259 OID 16543)
--- Name: players_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.players_id_seq
     AS integer
     START WITH 1
@@ -287,17 +228,10 @@ CREATE SEQUENCE delta_data.players_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3458 (class 0 OID 0)
--- Dependencies: 218
--- Name: players_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.players_id_seq OWNED BY delta_data.players.id;
-
+ALTER TABLE ONLY delta_data.players ALTER COLUMN id SET DEFAULT nextval('delta_data.players_id_seq'::regclass);
 
 --
--- TOC entry 258 (class 1259 OID 17460)
 -- Name: team_roster; Type: TABLE; Schema: delta_data; Owner: postgres
 --
 
@@ -312,11 +246,6 @@ CREATE TABLE delta_data.team_roster (
     order_index integer
 );
 
---
--- TOC entry 257 (class 1259 OID 17459)
--- Name: team_roster_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.team_roster_id_seq
     AS integer
     START WITH 1
@@ -325,18 +254,11 @@ CREATE SEQUENCE delta_data.team_roster_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3459 (class 0 OID 0)
--- Dependencies: 257
--- Name: team_roster_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.team_roster_id_seq OWNED BY delta_data.team_roster.id;
-
+ALTER TABLE ONLY delta_data.team_roster ALTER COLUMN id SET DEFAULT nextval('delta_data.team_roster_id_seq'::regclass);
 
 --
--- TOC entry 223 (class 1259 OID 16570)
--- Name: teams; Type: TABLE; Schema: delta_data; Owner: postgres
+-- Name: teams; Type: TABLE; Schema: delta_data
 --
 
 CREATE TABLE delta_data.teams (
@@ -369,11 +291,6 @@ CREATE TABLE delta_data.teams (
     location character varying
 );
 
---
--- TOC entry 222 (class 1259 OID 16569)
--- Name: teams_id_seq; Type: SEQUENCE; Schema: delta_data; Owner: postgres
---
-
 CREATE SEQUENCE delta_data.teams_id_seq
     AS integer
     START WITH 1
@@ -382,79 +299,58 @@ CREATE SEQUENCE delta_data.teams_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
--- TOC entry 3460 (class 0 OID 0)
--- Dependencies: 222
--- Name: teams_id_seq; Type: SEQUENCE OWNED BY; Schema: delta_data; Owner: postgres
---
-
 ALTER SEQUENCE delta_data.teams_id_seq OWNED BY delta_data.teams.id;
-
---
--- TOC entry 3282 (class 2604 OID 17408)
--- Name: api_loads_meta id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.api_loads_meta ALTER COLUMN id SET DEFAULT nextval('delta_data.api_loads_meta_id_seq'::regclass);
-
-
---
--- TOC entry 3281 (class 2604 OID 17266)
--- Name: game_events_abyline id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.game_events_abyline ALTER COLUMN id SET DEFAULT nextval('delta_data.game_events_abyline_id_seq'::regclass);
-
---
--- TOC entry 3280 (class 2604 OID 17249)
--- Name: games id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.games ALTER COLUMN id SET DEFAULT nextval('delta_data.games_id_seq'::regclass);
-
-
---
--- TOC entry 3273 (class 2604 OID 16564)
--- Name: player_heatmaps id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.player_heatmaps ALTER COLUMN id SET DEFAULT nextval('delta_data.player_heatmaps_id_seq'::regclass);
-
-
---
--- TOC entry 3266 (class 2604 OID 16547)
--- Name: players id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.players ALTER COLUMN id SET DEFAULT nextval('delta_data.players_id_seq'::regclass);
-
-
---
--- TOC entry 3284 (class 2604 OID 17463)
--- Name: team_roster id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
-ALTER TABLE ONLY delta_data.team_roster ALTER COLUMN id SET DEFAULT nextval('delta_data.team_roster_id_seq'::regclass);
-
-
---
--- TOC entry 3274 (class 2604 OID 16573)
--- Name: teams id; Type: DEFAULT; Schema: delta_data; Owner: postgres
---
-
 ALTER TABLE ONLY delta_data.teams ALTER COLUMN id SET DEFAULT nextval('delta_data.teams_id_seq'::regclass);
 
 
 --
--- TOC entry 3446 (class 0 OID 17405)
--- Dependencies: 256
--- Data for Name: api_loads_meta; Type: TABLE DATA; Schema: delta_data; Owner: postgres
+-- Name: populate_player_heatmaps; Type: PROCEDURE; Schema: delta_data
 --
 
+create procedure delta_data.populate_player_heatmaps()
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	--For now, doing full truncate/replace rather than track new ones only
+	--Because speed + laziness
+	TRUNCATE TABLE delta_data.player_heatmaps;
+	
+	INSERT INTO delta_data.player_heatmaps
+	(player_id, current_value, x, y, valid_from, valid_until)
+
+	SELECT player_id, heatmap_value::numeric, 
+	(nr-1)/6 as x, mod((nr-1),6) as y, valid_from, valid_until
+	FROM delta_data.players, 
+	unnest(string_to_array(replace(replace(tempheatmap,'{',''),'}',''),',')) WITH ORDINALITY a(heatmap_value, nr);
+
+end;
+$BODY$;
+
 --
--- If nothing else, populate the day before Delta Eon in api_loads_meta
--- To get things started
+-- Name: reset_db; Type: PROCEDURE; Schema: delta_data
 --
 
-INSERT INTO delta_data.api_loads_meta (load_timestamp, game_timestamp, player_timestamp, game_events_timestamp, division_timestamp, stadium_timestamp)
-VALUES ('2023-01-08 00:00:00', '2023-01-08 00:00:00', '2023-01-08 00:00:00', '2023-01-08 00:00:00', '2023-01-08 00:00:00', '2023-01-08 00:00:00');
+CREATE OR REPLACE PROCEDURE delta_data.reset_db(
+	)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    update delta_data.chron_load_page_tokens set page_token ='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=', valid_until = '2023-01-08 00:00:00';
+    truncate delta_data.players cascade;
+	truncate delta_data.player_heatmaps cascade;
+    truncate delta_data.teams cascade;
+    truncate delta_data.games cascade;
+    truncate delta_data.team_roster cascade;
+    truncate delta_data.game_events_raw cascade;
+end;
+$BODY$;
+
+--
+-- Start with default page_tokens for all the Chron calls, and the day before δ Eon S1
+--
+INSERT INTO delta_data.chron_load_page_tokens (object_name, page_token, valid_until)
+VALUES
+('games','AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=','2023-01-08 00:00:00'),
+('game-events','AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=','2023-01-08 00:00:00'),
+('players','AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=','2023-01-08 00:00:00'),
+('teams','AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=','2023-01-08 00:00:00');
