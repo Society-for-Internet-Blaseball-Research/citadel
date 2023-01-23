@@ -17,6 +17,7 @@ jobs:
       - run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
       - uses: docker/build-push-action@v2
         with:
+          file: docker/app/Dockerfile
           push: true
           tags: |
             ghcr.io/society-for-internet-blaseball-research/citadel:${{ env.BRANCH_NAME }}

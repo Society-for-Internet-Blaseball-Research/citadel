@@ -1,6 +1,17 @@
 # CiTaDel (Chron To Datablase Loader)
 Loading blaseball's Delta eon data from SIBR Chron APIs to the Datablase.  May be ad hoc, may be start of real program.
 
+## Quick setup using Docker
+
+- `scripts\init-test-env.sh` (or `.ps1` for Windows)
+- `scripts\init-schema.sh`
+- `scripts\run-citadel.sh`
+
+At this point you should have a working database running with the data loaded in from the Citadel script. You can execute SQL commands against the DB with `docker exec citadel-db psql <ARGS>`
+or connect to an interactive session with `docker exec -it citadel-db psql`. The citadel script can be run in again a container (`run-citadel.sh` above) or locally if a virtualenv is setup.
+
+## Manual setup
+
 To get this program running locally or on SIBR Server:
 -  Set up PostgreSQL in same machine as this program.
 -  Create database named "blaseball".
