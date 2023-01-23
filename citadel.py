@@ -32,15 +32,23 @@ def read_config():
 
 
 def pick_rating(categoryRatings, category):
+    #Adjusted S2Monday, when players have multiples of attributes, take the last one
+    #So loop through them all, get the value each time of correct attribute then pass last one.
     for item in categoryRatings:
         if item["name"] == category:
-            return item["stars"]
+            stars = item["stars"] 
+    
+    return stars 
 
 
 def pick_attribute(attributes, name):
+    #Adjusted S2Monday, when players have multiples of attributes, take the last one
+    #So loop through them all, get the value each time of correct attribute then pass last one.
     for item in attributes:
         if item["name"] == name:
-            return item["value"]
+            value = item["value"]
+    
+    return value
    
 
 def raw_rating(attributes, category):
