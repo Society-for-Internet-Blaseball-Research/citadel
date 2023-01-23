@@ -23,6 +23,7 @@ import sqlalchemy
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 import configparser
+import sys
 
 def read_config():
     config = configparser.ConfigParser()
@@ -370,3 +371,6 @@ if __name__ == "__main__":
     teamsMain()
     gamesMain()
     gameEventsMain()
+    
+    print('Annnnnd ... success!')
+    sys.exit(0)
