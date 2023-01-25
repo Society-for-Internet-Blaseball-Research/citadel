@@ -5,4 +5,4 @@ WORKDIR /app
 
 RUN python -m pip install -r requirements.txt
 
-CMD [ "python", "citadel.py"]
+CMD [ "python", "-u", "citadel.py"]
