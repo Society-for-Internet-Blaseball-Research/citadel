@@ -3,7 +3,7 @@
 ** Populate blaseball SQL server, as of Delta Eon **
 
 Created:        2023-01-15
-Last Update:    2023-01-22
+Last Update:    2023-01-24
 
 STILL TO DO:
     - Split out and create player_positions
@@ -15,15 +15,20 @@ STILL TO DO:
     - When hashed, trim down records from "raw" to "clean(?)" with dedupes
     - THEN we can talk functions and views
 
-@author: ifhbiff
+@author: ifhbiff (ParseClean code originally by Abyline)
 """
-import numpy as np
-import pandas as pd
-import sqlalchemy
-from datetime import datetime
-from sqlalchemy.orm import sessionmaker
+
+from collections import OrderedDict
 import configparser
+from datetime import datetime
+import numpy as np
+import json
+import pandas as pd
+import requests
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker
 import sys
+import time
 
 def read_config():
     config = configparser.ConfigParser()
@@ -372,13 +377,32 @@ def gamesMain():
         #If we've gotten this far, get the next page of events
         raw_games = pd.read_json("https://api2.sibr.dev/chronicler/v0/entities?kind=game&page={}".format(next_page))
         
-        
+
+'''
+Following def, code, etc all originally pulled from Abyline's parse-clean.py
+
+
+gamelist = requests.get("https://api2.sibr.dev/chronicler/v0/entities?kind=game&order=asc")
+games_ids = json.loads(gamelist.text)["items"]
+
+
+
+end parse-clean.py
+'''
+
+       
 if __name__ == "__main__":
     # execute only if run as a script
-    playersMain()
-    teamsMain()
-    gamesMain()
-    gameEventsMain()
+    # Attempting for delayed loop
+    while True:
+        print('Loop started at {0}.'.format(format(datetime.now())))
+        playersMain()
+        teamsMain()
+        gamesMain()
+        gameEventsMain()
+        
+        print('Annnnnd ... success!')
+        
+        time.sleep(600)
     
-    print('Annnnnd ... success!')
     sys.exit(0)
