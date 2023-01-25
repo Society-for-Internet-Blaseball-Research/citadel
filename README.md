@@ -17,7 +17,7 @@ To get this program running locally or on SIBR Server:
 -  Create database named "blaseball".
 -  Run the initial SQL to create two schemas (and appropriate tables inside): delta_data_schema.sql and delta_taxa_schema.sql
 -  Make a copy of database_config_example.ini, saved as database_config.ini, with appropriate changes to user/pw/host/port
--  Python code runs on Python 3.10, as well as the following libraries: numpy, pandas, sqlalchemy, psycopg2, configparser, and sys.
+-  Python code runs on Python 3.10, as well as the following libraries: numpy, pandas, sqlalchemy, psycopg2, requests, configparser, and sys.
 
 Any questions, tips, issues, feel free to come to the Society for Internet Blaseball Research Discord server: https://discord.gg/FfnScUn , 
 and visit @Gizmo aka Ifhbiff (he/him) and the other Data Witches in the #datablase forum.
